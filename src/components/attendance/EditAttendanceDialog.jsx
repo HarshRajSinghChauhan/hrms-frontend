@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useUpdateAttendance } from "@/hooks/attendance/api";
 
 import {
@@ -28,9 +28,18 @@ export default function EditAttendanceDialog({ record, trigger }) {
   const [open, setOpen] = useState(false);
 
   const [form, setForm] = useState({
-    date: record.date,
-    status: record.status,
+    date: "",
+    status: "Present",
   });
+
+  useEffect(() => {
+    if (open) {
+      setForm({
+        date: record.date,
+        status: record.status,
+      });
+    }
+  }, [open, record]);
 
   const handleSubmit = () => {
     updateAttendance(
@@ -39,7 +48,9 @@ export default function EditAttendanceDialog({ record, trigger }) {
         payload: form,
       },
       {
-        onSuccess: () => setOpen(false),
+        onSuccess: () => {
+          setOpen(false); 
+        },
       }
     );
   };

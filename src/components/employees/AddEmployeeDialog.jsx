@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAddEmployee } from "@/hooks/employees/api";
 
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
 } from "@/components/ui/dialog";
 
 import { Button } from "@/components/ui/button";
@@ -16,83 +16,106 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function AddEmployeeDialog() {
-  const { mutate: addEmployee, isPending } = useAddEmployee();
+    const { mutate: addEmployee, isPending } = useAddEmployee();
 
-  const [form, setForm] = useState({
-    employee_id: "",
-    full_name: "",
-    email: "",
-    department: "",
-  });
+    const [open, setOpen] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    addEmployee(form);
-  };
+    const [form, setForm] = useState({
+        employee_id: "",
+        full_name: "",
+        email: "",
+        department: "",
+    });
 
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button>Add Employee</Button>
-      </DialogTrigger>
+    useEffect(() => {
+        if (open) {
+            setForm({
+                employee_id: "",
+                full_name: "",
+                email: "",
+                department: "",
+            });
+        }
+    }, [open]);
 
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Add Employee</DialogTitle>
-        </DialogHeader>
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          
-          <div>
-            <Label>Employee ID</Label>
-            <Input
-              value={form.employee_id}
-              onChange={(e) =>
-                setForm({ ...form, employee_id: e.target.value })
-              }
-              required
-            />
-          </div>
+        addEmployee(form, {
+            onSuccess: () => {
+                setOpen(false);
+            },
+        });
+    };
 
-          <div>
-            <Label>Full Name</Label>
-            <Input
-              value={form.full_name}
-              onChange={(e) =>
-                setForm({ ...form, full_name: e.target.value })
-              }
-              required
-            />
-          </div>
+    return (
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                <Button>Add Employee</Button>
+            </DialogTrigger>
 
-          <div>
-            <Label>Email</Label>
-            <Input
-              type="email"
-              value={form.email}
-              onChange={(e) =>
-                setForm({ ...form, email: e.target.value })
-              }
-              required
-            />
-          </div>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Add Employee</DialogTitle>
+                </DialogHeader>
 
-          <div>
-            <Label>Department</Label>
-            <Input
-              value={form.department}
-              onChange={(e) =>
-                setForm({ ...form, department: e.target.value })
-              }
-              required
-            />
-          </div>
+                <form onSubmit={handleSubmit} className="space-y-4">
 
-          <Button type="submit" disabled={isPending}>
-            Save
-          </Button>
-        </form>
-      </DialogContent>
-    </Dialog>
-  );
+                    <div>
+                        <Label>Employee ID</Label>
+                        <Input
+                            value={form.employee_id}
+                            onChange={(e) =>
+                                setForm({
+                                    ...form,
+                                    employee_id: e.target.value.replace(/\D/g, ""),
+                                })
+                            }
+                            inputMode="numeric"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <Label>Full Name</Label>
+                        <Input
+                            value={form.full_name}
+                            onChange={(e) =>
+                                setForm({ ...form, full_name: e.target.value })
+                            }
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <Label>Email</Label>
+                        <Input
+                            type="email"
+                            value={form.email}
+                            onChange={(e) =>
+                                setForm({ ...form, email: e.target.value })
+                            }
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <Label>Department</Label>
+                        <Input
+                            value={form.department}
+                            onChange={(e) =>
+                                setForm({ ...form, department: e.target.value })
+                            }
+                            required
+                        />
+                    </div>
+
+                    <Button type="submit" disabled={isPending}>
+                        {isPending ? "Saving..." : "Save"}
+                    </Button>
+
+                </form>
+            </DialogContent>
+        </Dialog>
+    );
 }
