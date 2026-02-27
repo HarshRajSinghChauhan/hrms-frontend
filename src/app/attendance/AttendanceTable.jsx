@@ -2,7 +2,7 @@
 
 import { useAttendance } from "@/hooks/attendance/api";
 import { Pencil } from "lucide-react";
-import EditAttendanceDialog from "@/components/attendance/EditAttendanceDialog";
+import EditAttendanceDialog from "@/app/attendance/EditAttendanceDialog";
 import { Loader2 } from "lucide-react";
 
 import {

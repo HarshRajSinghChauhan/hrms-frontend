@@ -1,5 +1,5 @@
-import MarkAttendanceDialog from "@/components/attendance/MarkAttendanceDialog";
-import AttendanceTable from "@/components/attendance/AttendanceTable";
+import MarkAttendanceDialog from "@/app/attendance/MarkAttendanceDialog";
+import AttendanceTable from "@/app/attendance/AttendanceTable";
 
 export default function AttendancePage() {
   return (

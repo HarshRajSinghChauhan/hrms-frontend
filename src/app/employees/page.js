@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import AddEmployeeDialog from "@/components/employees/AddEmployeeDialog";
-import EmployeeTable from "@/components/employees/EmployeeTable";
+import AddEmployeeDialog from "@/app/employees/AddEmployeeDialog";
+import EmployeeTable from "@/app/employees/EmployeeTable";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
